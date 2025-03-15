@@ -1,11 +1,15 @@
+import os
 from flask import Flask, request, jsonify
 import openai
+from dotenv import load_dotenv
 
-# 初始化 Flask 應用
+load_dotenv()  # 加載 .env 檔案
+
 app = Flask(__name__)
 
-# 設定 OpenAI API 金鑰
-openai.api_key = 'your-api-key'
+# 設定 OpenAI API Key
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 # 處理 /ask 路徑的 GET 和 POST 請求
 @app.route('/ask', methods=['GET', 'POST'])
