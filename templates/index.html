@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChatGPT 問答機器人</title>
+</head>
+<body>
+  <h1>問答機器人</h1>
+  <form id="questionForm">
+    <label for="question">請輸入你的問題：</label>
+    <input type="text" id="question" name="question" required />
+    <button type="submit">提交問題</button>
+  </form>
+
+  <h2>回答：</h2>
+  <p id="answer"></p>
+
+  <script>
+    document.getElementById('questionForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const userQuestion = document.getElementById('question').value;
+      const answerEl = document.getElementById('answer');
+      answerEl.innerText = '⏳ 正在思考中...';
+
+      try {
+        const response = await fetch('/ask', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ question: userQuestion }),
+        });
+
+        const data = await response.json();
+        answerEl.innerText = data.answer || '❗ 無法取得回應';
+      } catch (err) {
+        answerEl.innerText = '🚨 發生錯誤，請稍後再試';
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
